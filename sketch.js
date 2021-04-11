@@ -1,18 +1,26 @@
 let rotationSpeed = .3;
 
+let startTime = true;
 let animate = false;
 
 let triX = 0;
 let triY = 0;
 
-let currentFrames;
+let currentFrame;
+let rotationFrame;
 
 let l = 62;
 
 let c1;
 let c2;
 
+let state0 = false;
+let state1 = false;
+let state2 = false;
+let state3 = false;
+
 let phase1;
+let phase2;
 
 let triRotate = 0;
 
@@ -25,31 +33,28 @@ function setup()
 
 function draw() 
 {
-  console.log(currentFrames);
 
   ortho(-width / 2, width / 2, height / 2, -height / 2, 1000, 0);
-  
   orbitControl();
-
   background('#222222');
+  setState();
 
-  if(frameCount % (rotationSpeed*1000) === 0) {
-    console.log("explode now");
-
-    animate = true;
-    currentFrames = frameCount;
-
-  }
+  // push();
+  // ellipseMode(CENTER);
+  // fill("red");
+  // translate(176.5,0);
+  // ellipse(0, 0, 10);
+  // pop();
 
 
   //INSIDE CUBE
 
   push();
-    if(!animate)
+    if(state3)
     {
       rotateX(-35);
       rotateY(45);
-      rotateY(frameCount * rotationSpeed);
+      rotateY((frameCount-(currentFrame+188)) * -rotationSpeed);
       translate(-(l/2), -(l/2), (l/2));
       noStroke();
 
@@ -58,10 +63,10 @@ function draw()
       for (i=0; i<6; i++)
         {
 
-          if(i === 0) //ORANGE
+          if(i === 0) //LIGHT GREEN
           {
-            c1="#e0795a";
-            c2="#e0795a";
+            c1="#c6fac3";
+            c2="#c6fac3";
 
             fill(c1);
             triangle(0,0,0,l,l,0);
@@ -97,8 +102,8 @@ function draw()
           if(i===3) { // BLUE
             translate(l,0,0);
             rotateY(90);
-              c1="#4c92d9";
-              c2="#4c92d9";
+              c1="#7e47d1";
+              c2="#7e47d1";
               fill(c1);
               triangle(0,0,0,l,l,0);
               fill(c2);
@@ -110,8 +115,8 @@ function draw()
               
               rotateX(-90);
               translate(0,0,l);
-              c1="#7e47d1";
-              c2="#7e47d1";
+              c1="#e0795a";
+              c2="#e0795a";
               fill(c1);
               triangle(0,0,0,l,l,0);
               fill(c2);
@@ -141,7 +146,9 @@ function draw()
   push();
     rotateX(-35);
     rotateY(45);
-    //rotateY(frameCount * rotationSpeed);
+    if(state3){
+      rotateY((frameCount-(currentFrame+188)) * rotationSpeed);
+    }
     noFill();
     
     stroke("white");
@@ -152,60 +159,114 @@ function draw()
 
   push();
 
-    if(animate){
-      fill(color(0, 126, 255, 255));
-      noStroke();
-      phase1 = min( (frameCount-currentFrames)/ 30, 1);
-      /*
-      if(phase1 ===1 && frameCount-currentFrames >50){
-        rotateZ(triRotate);
-        if(triRotate <=225)
-        triRotate += 5;
-      }
-      */
+  rotateZ(180);
+
+  if(!state3) {
+
+    noStroke();
+
+    if(state1)
+    {
+      rotateZ(180*phase1);
+    }
 
       push(); // LEFT BOTTOM
       fill("#7e47d1");
         //translate(-20*phase1, -40*phase1 );
         translate(-42, -72.7461);
+
+        if(state2) {
+          translate(42 * phase2, 72.7461 * phase2);
+        }
+
         triangle(0, 0 + 0, 0, 0 + -50, 0 + (-25*sqrt(3)), 0 + -25);
+
+
       pop();
 
       push();
         fill("#de49ac"); //LEFT TOP
-        //translate(-20*phase1, 40*phase1);
+
         translate(-42, 72.7461);
+        if(state2) {
+          translate(42 * phase2, -72.7461 * phase2);
+        }
         triangle(0, 0, 0, 50, -25*sqrt(3), 25);
       pop();
 
       push(); //RIGHT
         fill("#e0795a");
-        //translate(40*phase1, 0);
         translate(84.25, 0 );
+        if(state2) {
+          translate(-84.25 * phase2, 0);
+        }
         triangle(0, 0, 25*sqrt(3), 25, 25*sqrt(3),-25);
       pop();
 
       push(); // LEFT
         fill("#7e47d1");
         translate(-84.25, 0);
+        if(state2) {
+          translate(84.25 * phase2, 0);
+        }
         triangle(0, 0, -25*sqrt(3), 25, -25*sqrt(3),-25);
       pop();
 
       push(); //RIGHT BOTTOM
         fill("#e0795a");
-         translate(42, -72.7461);
+        translate(42, -72.7461);
+        if(state2) {
+          translate(-42 * phase2, 72.7461 * phase2);
+        }
         triangle(0, 0, 0, -50, 25*sqrt(3), -25);
       pop();
 
       push(); //RIGHT TOP
         fill("#de49ac");
-         translate(42, 72.7461);
+        translate(42, 72.7461);
+        if(state2) {
+          translate(-42 * phase2, -72.7461 * phase2);
+        }
         triangle(0, 0, 0, 50, 25*sqrt(3), 25);
       pop();
-  }
+    }
 
-  pop();
-  
-    
+  pop(); 
 
 }
+
+function setState() {
+//||  (frameCount % (rotationSpeed*2000) === 0)
+  if( frameCount === 1  ) 
+  {
+    currentFrame = frameCount;
+  }
+
+    if (frameCount - currentFrame === 0) {
+      state0 = true;
+    }
+
+    if(frameCount - currentFrame >= 50) {
+      state1 = true;
+      phase1 = min( (frameCount - (currentFrame+50))/100, 1);
+    }
+
+    if(frameCount - currentFrame >= 151) {
+      state2 = true;
+      phase2 = min( (frameCount - (currentFrame+151))/30, 1);
+    }
+
+    if(frameCount - currentFrame >= 188) {
+      state3 = true;
+      phase3 = min( (frameCount - (currentFrame+188))/120, 1);
+    }
+
+    if(frameCount % (188 + (rotationSpeed * 2000)) === 0) {
+      console.log("boom");
+    }
+
+
+}
+
+
+
