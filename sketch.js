@@ -167,39 +167,39 @@ function draw()
       push(); // LEFT BOTTOM
       fill("#7e47d1");
         //translate(-20*phase1, -40*phase1 );
-        translate(-5*phase1, -10*phase1 );
+        translate(-42, -72.7461);
         triangle(0, 0 + 0, 0, 0 + -50, 0 + (-25*sqrt(3)), 0 + -25);
       pop();
 
       push();
         fill("#de49ac"); //LEFT TOP
         //translate(-20*phase1, 40*phase1);
-        translate(-5*phase1, 10*phase1 );
+        translate(-42, 72.7461);
         triangle(0, 0, 0, 50, -25*sqrt(3), 25);
       pop();
 
       push(); //RIGHT
         fill("#e0795a");
         //translate(40*phase1, 0);
-        translate(10*phase1, 0 );
+        translate(84.25, 0 );
         triangle(0, 0, 25*sqrt(3), 25, 25*sqrt(3),-25);
       pop();
 
       push(); // LEFT
         fill("#7e47d1");
-        translate(-60*phase1, 0);
+        translate(-84.25, 0);
         triangle(0, 0, -25*sqrt(3), 25, -25*sqrt(3),-25);
       pop();
 
       push(); //RIGHT BOTTOM
         fill("#e0795a");
-         translate(30*phase1, -60*phase1);
+         translate(42, -72.7461);
         triangle(0, 0, 0, -50, 25*sqrt(3), -25);
       pop();
 
       push(); //RIGHT TOP
         fill("#de49ac");
-         translate(30*phase1, 60*phase1);
+         translate(42, 72.7461);
         triangle(0, 0, 0, 50, 25*sqrt(3), 25);
       pop();
   }
