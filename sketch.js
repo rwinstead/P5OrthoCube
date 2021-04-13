@@ -20,9 +20,12 @@ let state0 = false;
 let state1 = false;
 let state2 = false;
 let state3 = false;
+let state4 = false;
 
 let phase1;
 let phase2;
+
+let phase4;
 
 let triRotate = 0;
 
@@ -35,6 +38,10 @@ function setup()
 
 function draw() 
 {
+
+    if(state3) {
+      phase4 = min( (frameCount)/130, 1);
+    }
 
   ortho(-width / 2, width / 2, height / 2, -height / 2, 1000, 0);
   orbitControl();
@@ -55,18 +62,23 @@ function draw()
     if(state3)
     {
       rotateX(-35);
-      rotateY(45);
+      rotateY(315); //starts at 45
       rotateY((frameCount-(currentFrame+188)) * -rotationSpeed);
+      //rotateY(frameCount*rotationSpeed);
       translate(-(l/2), -(l/2), (l/2));
       noStroke();
-
 
       
       for (i=0; i<6; i++)
         {
 
-          if(i === 0) //DARKER PURPLE
+          if(i === 0) //DARKER PURPLE _BACK FACE_ GOES LEFT
           {
+            push();
+
+            if(state4) {
+              translate(0, 0, 94 * phase4 );
+            }
               c1="#47197A";
               c2="#47197A";
 
@@ -76,66 +88,122 @@ function draw()
 
             fill(c2);
             triangle(l,0,l,l,0,l);
+            pop();
             
           }
           
-          if(i === 1) //LIGHTER PURPLE (not initially visible)
+          
+          if(i === 1) //LIGHTER PURPLE _LEFT_ GOES LEFT
             {
+              push();
+              if(state4) {
+                translate(-94 * phase4, 0);
+              }
               rotateY(90);
-              c1="#9D70FF";
+              c1="goldenrod";
               c2="#9D70FF";
               fill(c1);
-              triangle(0,0,0,l,l,0);
+              triangle(0,0,l,0,l,l);
               fill(c2);
-              triangle(l,0,l,l,0,l);
+              triangle(0,0,0,l,l,l);
+              pop();
             }
+            
           
-          if(i===2) // LIGHTEST PURPLE (bottom)
+          if(i===2) // LIGHTEST PURPLE _BOTTOM_ SPLIT
             {
-              rotateX(90);
-              c1="#CAB1FF";
+              push();
+              c1="green";
               c2="#CAB1FF";
+              if(!state4) {
+                rotateX(-90);
+              }
               fill(c1);
-              triangle(0,0,0,l,l,0);
-              fill(c2);
-              triangle(l,0,l,l,0,l);
+              push();
+                if(state4) {
+                  translate(-59.22*phase4, -59.22*phase4);
+                  rotateX(-90);
+                }
+                triangle(0,0,0,l,l,0);
+              pop();
+              push();
+                if(state4) {
+                  translate(61*phase4, -120*phase4);
+                  rotateX(-90);
+                }
+                fill(c2);
+                triangle(l,0,l,l,0,l);
+              pop();
+              pop();
             }
+            
           
-          if(i===3) { // DARK PURPLE
+          if(i===3) { // DARK PURPLE _RIGHT_ GOES RIGHT
+            push();
+                if(state4) {
+                  translate(94 * phase4, 0);
+                }
             translate(l,0,0);
             rotateY(90);
-              c1="#47197A";
+              c1="pink";
               c2="#47197A";
               fill(c1);
-              triangle(0,0,0,l,l,0);
+              triangle(0,0,l,0,l,l);
               fill(c2);
-              triangle(l,0,l,l,0,l);
+              triangle(0,0,0,l,l,l);
+              pop();
           }
           
-          if(i===4) // LIGHTER PURPLE
+          
+          if(i===4) // LIGHTER PURPLE _TOP_ SPLIT
             {
-              
-              rotateX(-90);
-              translate(0,0,l);
-              c1="#9D70FF";
+              push();
+              if(!state4){
+                rotateX(-90);
+                translate(0,0,l);
+              }
+              c1="red";
               c2="#9D70FF";
               fill(c1);
+              push();
+              if(state4){
+                translate(0,94*phase4, 0);
+                rotateX(-90);
+                translate(0,0,l);
+              }
               triangle(0,0,0,l,l,0);
-              fill(c2);
-              triangle(l,0,l,l,0,l);
+              pop();
+
+              push();
+                if(state4) {
+                  translate(0,94*phase4);
+                  rotateX(-90);
+                  translate(0,0,l);
+                }
+                fill(c2);
+                triangle(l,0,l,l,0,l);
+              pop();
+              pop();
             }
+            
           
-          if(i===5) // LIGHTEST PURPLE (top)
+          if(i===5) // LIGHTEST PURPLE /FRONT
             {
-              translate(l,0,0);
-              rotateY(90);
+              push();
+                if(state4) {
+                  translate(0, 0, -94*phase4);
+                }
+              translate(0,0,-l);
+              //rotateY(90);
               c1="#CAB1FF";
-              c2="#CAB1FF";
+              c2="teal";
               fill(c1);
               triangle(0,0,0,l,l,0);
               fill(c2);
               triangle(l,0,l,l,0,l);
+              pop();
             }
+            
           
         }
       }
@@ -143,13 +211,14 @@ function draw()
   pop();
 
 
-  //OUTLINE CUBE
+  //OUTLINE CUBE ***************************************************
 
   push();
     rotateX(-35);
     rotateY(45);
     if(state3){
       rotateY((frameCount-(currentFrame+188)) * rotationSpeed);
+      //rotateY(frameCount*rotationSpeed);
     }
     noFill();
     
@@ -163,9 +232,11 @@ function draw()
 
   rotateZ(180);
 
-  if(!state3) {
+
+  if(!state3) { //CHANGE BACK TO IF NOT STATE3
 
     noStroke();
+
 
     if(state1)
     {
@@ -263,9 +334,13 @@ function setState() {
       phase3 = min( (frameCount - (currentFrame+188))/120, 1);
     }
 
-    if(frameCount % (188 + (rotationSpeed * 2000)) === 0) {
+    if(frameCount % (188 + (rotationSpeed * 1000)) === 0) {
       //placeholder to advance animation
+      console.log("boom");
+      state4 = true;
     }
+
+
 
 
 }
