@@ -1,17 +1,6 @@
 let rotationSpeed = .3;
 
-let startTime = true;
-let animate = false;
-
-let triX = 0;
-let triY = 0;
-
-let currentFrame;
-let rotationFrame;
-
 let l = 62;
-
-let speed = 0;
 
 let c1;
 let c2;
@@ -24,10 +13,7 @@ let state4 = false;
 
 let phase1;
 let phase2;
-
 let phase4;
-
-let triRotate = 0;
 
 let counter = 0;
 
@@ -35,38 +21,30 @@ function setup()
 {
   createCanvas(600, 600, WEBGL);
   angleMode(DEGREES);
-  //debugMode();
 }
 
 function draw() 
 {
 
-
   ortho(-width / 2, width / 2, height / 2, -height / 2, 1000, 0);
   orbitControl();
   background('#222222');
-  setState();
-  counter+=1;
 
+  if(frameCount > 20){
+    setState();
+    counter+=1;
+}
 
   //INSIDE CUBE
-
-  //DARKEST PURPLE: #47197A
-  //LIGHTER PURPLE: #9D70FF
-  //LIGHTEST PURPLE: #CAB1FF
-
   push();
     if(state3)
     {
       rotateX(-35);
-      rotateY(135); //starts at 45
-      //rotateY((frameCount-(currentFrame+188)) * rotationSpeed);
-      rotateY((counter - 188)*rotationSpeed);
-      //rotateY(frameCount*rotationSpeed);
+      rotateY(135);
+      rotateY((counter - 138)*rotationSpeed);
       translate(-(l/2), -(l/2), (l/2));
       noStroke();
 
-      
       for (i=0; i<6; i++)
         {
 
@@ -75,7 +53,7 @@ function draw()
             push();
               c1="#9D70FF";
               c2="#9D70FF";
-//                   translate(89.33 * phase4, -29.33*phase4, -29.33*phase4);
+
             push();
             if(state4) {
               translate(-29.33*phase4, -29.33*phase4, 89.33 * phase4 );
@@ -140,7 +118,6 @@ function draw()
               fill(c1);
               push();
                 if(state4) {
-                  //translate(-59.22*phase4, -59.22*phase4);
                   translate((-29.7)*phase4, -88.5* phase4, 29.7*phase4);
                   rotateX(-90);
                 }
@@ -148,7 +125,6 @@ function draw()
               pop();
               push();
                 if(state4) {
-                  //translate(61*phase4, -120*phase4);
                   translate((29.7)*phase4, -88.5 * phase4, -29.7*phase4);
                   rotateX(-90);
                 }
@@ -270,8 +246,7 @@ function draw()
     rotateX(-35);
     rotateY(45);
     if(state3){
-      //rotateY((frameCount-(currentFrame+188)) * rotationSpeed);
-      rotateY((counter - 188)*rotationSpeed);
+      rotateY((counter - 138)*rotationSpeed);
     }
     noFill();
     
@@ -295,7 +270,6 @@ function draw()
 
       push(); // LEFT BOTTOM
       fill("#47197A");
-        //translate(-20*phase1, -40*phase1 );
 
         translate(-42, -72.7461);
 
@@ -366,40 +340,34 @@ function setState() {
       state0 = true;
     }
 
-    if(counter >= 50) {
+    if(counter >= 1) {
       state1 = true;
-      phase1 = min( (counter-50)/100, 1);
+      phase1 = min( (counter)/100, 1);
     }
 
-    if(counter >= 151) {
+    if(counter >= 101) {
       state2 = true;
-      phase2 = min( (counter-151)/30, 1);
+      phase2 = min( (counter-101)/30, 1);
     }
 
-    if(counter >= 188) {
+    if(counter >= 138) {
       state3 = true;
-      phase3 = min( (counter-188)/120, 1);
+      phase3 = min( (counter-138)/120, 1);
     }
 
-//frameCount % (188 + (rotationSpeed * 2000)) === 0)
-    if(counter >= 188 + (rotationSpeed * 1000)) {
+    if(counter >= 138 + (rotationSpeed * 1000)) {
       state4 = true;
-      phase4 = min( (counter-488)/300, 1);
+      phase4 = min( (counter-438)/300, 1);
     }
 
-    if(counter >= 788) {
+    if(counter >= 740) {
       state0 = false;
       state1 = false;
       state2 = false;
       state3 = false;
       state4 = false;
       counter = 0;
-      phase1 = 0;
-      phase3 = 0;
-      phase4 = 0;
     }
-
-
 }
 
 
